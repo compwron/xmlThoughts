@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<project name="Sample" default="jars" basedir=".">
+    <target name="compile" description="Compile source code.">
+        <mkdir dir="antBuild"/>
+        <javac destdir="antBuild" deprecation="off" nowarn="on" debug="on">
+            <classpath>
+                <pathelement location="jaxbJarGeneration/jaxb-ri-20090708/lib/jaxb-api.jar"/>
+                <pathelement location="jaxbJarGeneration/jaxb-ri-20090708/lib/jaxb-impl.jar"/>
+                <pathelement location="jaxbJarGeneration/jaxb-ri-20090708/lib/jaxb-xjc.jar"/>
+                <pathelement location="jaxbJarGeneration/jaxb-ri-20090708/lib/jaxb1-impl.jar"/>
+                <pathelement location="libs/sampleClassJar.jar"/>
+            </classpath>
+            <src path="src"/>
+            <include name="**/*.java"/>
+        </javac>
+    </target>
+
+    <target name="clean" description="Clean up built files.">
+        <delete dir="antBuild"/>
+        <delete dir="antTestOutput"/>
+    </target>
+
+    <target name="test" depends="compile">
+		<mkdir dir="antTestOutput" />
+		<junit printsummary="true" failureproperty="junit.failure">
+			<formatter type="xml" />
+			<formatter type="brief" usefile="false" />
+			<classpath>
+				<!-- test-only -->
+				<pathelement location="libs/junit.jar" />
+
+				<!-- same as compile -->
+				<pathelement location="jaxbJarGeneration/jaxb-ri-20090708/lib/jaxb-api.jar"/>
+                <pathelement location="jaxbJarGeneration/jaxb-ri-20090708/lib/jaxb-impl.jar"/>
+                <pathelement location="jaxbJarGeneration/jaxb-ri-20090708/lib/jaxb-xjc.jar"/>
+                <pathelement location="jaxbJarGeneration/jaxb-ri-20090708/lib/jaxb1-impl.jar"/>
+                <pathelement location="libs/sampleClassJar.jar"/>
+				<!-- <pathelement location="antBuild"/> -->
+			</classpath>
+			<batchtest todir="antTestOutput">
+				<fileset dir="src">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail if="junit.failure" message="Unit test(s) failed.  See reports!" />
+	</target>
+
+</project>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<project name="Sample" default="jars" basedir=".">
+	<target name="compile" description="Compile source code.">
+		<mkdir dir="antBuild" />
+		<javac destdir="antBuild" deprecation="off" nowarn="on" debug="on">
+			<classpath>
+				<pathelement location="jaxb-ri-20090708/lib/jaxb-api.jar" />
+				<pathelement location="jaxb-ri-20090708/lib/jaxb-impl.jar" />
+				<pathelement location="jaxb-ri-20090708/lib/jaxb-xjc.jar" />
+				<pathelement location="jaxb-ri-20090708/lib/jaxb1-impl.jar" />
+			</classpath>
+			<src path="generated" />
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+	<target name="clean" description="Clean up built files.">
+		<delete dir="antBuild" />
+	</target>
+
+	<target name="jars" depends="compile" description="Create jar files.">
+		<jar destfile="sampleClassJar.jar">
+			<manifest>
+				<attribute name="Specification-Title" value="specification title" />
+			</manifest>
+			<fileset dir="antBuild">
+				<include name="**/*.class" />
+			</fileset>
+		</jar>
+
+		<jar destfile="sampleClassJarSrc.jar">
+			<manifest>
+				<attribute name="Specification-Title" value="specification title" />
+			</manifest>
+			<fileset dir="generated">
+				<include name="**/*.java" />
+			</fileset>
+		</jar>
+	</target>
+</project>
